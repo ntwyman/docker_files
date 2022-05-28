@@ -1,11 +1,14 @@
-FROM repo_base
+FROM gnu-riscv as rv-tools
 
-RUN apt-get update
 
-# Dependencies to build ARM and x86 (on ARM)
-RUN apt-get install -y --no-install-recommends \
+FROM debian:bullseye-slim
+COPY sources.list /etc/apt/sources.list
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     astyle=3.1-2+b1 \
+    bc \
     build-essential \
+    ca-certificates \
     ccache \
     clang-11 \
     cmake \
@@ -13,11 +16,19 @@ RUN apt-get install -y --no-install-recommends \
     coreutils \
     cpio \
     curl \
+    devscripts \
     device-tree-compiler \
     doxygen \
-    g++-10 \
-    gcc-10 \
-    gcc-10-base \
+    devscripts \
+    g++ \
+    g++-arm-linux-gnueabi \
+    g++-arm-linux-gnueabihf \
+    gcc \
+    gcc-arm-linux-gnueabi \
+    gcc-arm-linux-gnueabihf \
+    iproute2 \
+    iputils-ping \
+    jq \
     libarchive-dev \
     libcc1-0 \
     libclang-11-dev \
@@ -25,45 +36,26 @@ RUN apt-get install -y --no-install-recommends \
     libuv1 \
     libxml2-utils \
     locales \
+    make \
     ninja-build \
     protobuf-compiler \
+    python \
+    python3-dev \
+    python3-pip \
     python3-protobuf \
     qemu-system-x86 \
     qemu-system-arm \
     qemu-system-misc \
+    repo \
     sloccount \
+    ssh \
     sudo \
-    u-boot-tools
-RUN pip3 install --no-cache-dir pylint sel4_deps
-
-# RiscV toolchain
-RUN apt-get install  -y --no-install-recommends \
-    autoconf \
-    automake \
-    autotools-dev \
-    curl \
-    python3 \
-    libmpc-dev \
-    libmpfr-dev \
-    libgmp-dev \
-    gawk \
-    build-essential \
-    bison \
-    flex \
-    texinfo \
-    gperf \
-    libtool \
-    patchutils \
-    bc \
-    zlib1g-dev \
-    libexpat-dev
-RUN git clone https://github.com/riscv/riscv-gnu-toolchain /tmp/riscv-gnu-toolchain
-RUN cd /tmp/riscv-gnu-toolchain && \
-    ./configure --prefix /opt/riscv/ --enable-multilib && \
-    make linux && \
-    cd && \
-    rm -rf /tmp/riscv-gnu-toolchain
-
-RUN apt-get clean autoclean && \
+    traceroute \
+    u-boot-tools && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python2 10 && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 20 && \
+    pip3 install --no-cache-dir gitlint nose pylint reuse setuptools sel4_deps && \
+    apt-get clean autoclean && \
     apt-get autoremove --purge --yes && \
     rm -rf /var/lib/apt/lists/*
+COPY --from=rv-tools /opt/riscv/ /opt/riscv
