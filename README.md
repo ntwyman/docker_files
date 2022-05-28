@@ -6,7 +6,7 @@ for an Aarch64 container (am running on M1 Mac).
 
 ## gnu-riscv
 
-This image is not used for development but build the [GNU riscv gcc toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). Leaves tools in `/opt/riscv/`.
+This image is not used for development. It builds the [GNU riscv gcc toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). Leaves tools in `/opt/riscv/`.
 
 Might be better to build to a mountable volume... currently just copy directly from this image.
 
