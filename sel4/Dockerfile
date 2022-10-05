@@ -1,4 +1,4 @@
-FROM gnu-riscv as rv-tools
+FROM riscv as rv-tools
 
 
 FROM debian:bullseye-slim
@@ -58,4 +58,10 @@ RUN apt-get update && \
     apt-get clean autoclean && \
     apt-get autoremove --purge --yes && \
     rm -rf /var/lib/apt/lists/*
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8
+
 COPY --from=rv-tools /opt/riscv/ /opt/riscv
