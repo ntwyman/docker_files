@@ -6,13 +6,13 @@ for an Aarch64 container (am running on M1 Mac).
 
 ## gnu-riscv
 
-This image is not used for development but build the [GNU riscv gcc toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). Leaves tools in `/opt/riscv/`.
+This image is not used for development. It builds the [GNU riscv gcc toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). Leaves tools in `/opt/riscv/`.
 
 Might be better to build to a mountable volume... currently just copy directly from this image.
 
 ## sel4
 
-This builds an image based on `debian:bullseye-slim`, based on the [seL4-CAmkES-L4v](https://github.com/seL4/seL4-CAmkES-L4v-dockerfiles) docker files from the folks at [Trustworthy Systems](https://trustworthy.systems)[^1].
+This builds an image FROM `debian:bullseye-slim`, based on the [seL4-CAmkES-L4v](https://github.com/seL4/seL4-CAmkES-L4v-dockerfiles) docker files from the folks at [Trustworthy Systems](https://trustworthy.systems)[^1].
 
 This currently installs all the requirements from `base_tools` and `sel4` necessary to build `sel4` kernels for `arm`, `aarch64`, `riscv32` and `riscv64` systems.
 
